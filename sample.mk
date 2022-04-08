@@ -1,5 +1,5 @@
 host     := localhost
-user     := postres
+user     := postgres
 db       := mydb
 password := postgres
 port     := 5432
@@ -18,10 +18,14 @@ stop:
 	docker stop postgres_ctr
 
 createdb:
-	docker exec -it postgres_ctr createdb --username=$(user) --owner=$(user) $(db)
+	docker exec -it postgres_ctr createdb\
+		--username=$(user) --owner=$(user) $(db)
+	docker cp $(PWD)/sample.sql postgres_ctr:/home/sample.sql
+	docker exec -it postgres_ctr \
+		psql -U $(user) $(db) -h 127.0.0.1 -p $(port) -f /home/sample.sql
 
 dropdb:
-	docker exec -it postgres_ctr dropdb $(db)
+	docker exec -it postgres_ctr dropdb -U $(user) $(db)
 
 shell:
 	docker exec -it postgres_ctr psql -U $(user) $(db) -h 127.0.0.1 -p $(port)
