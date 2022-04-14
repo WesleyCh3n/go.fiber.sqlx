@@ -31,7 +31,7 @@ func GetHws(c *fiber.Ctx) error {
 		"error": false,
 		"msg":   nil,
 		"count": len(hws),
-		"books": hws,
+		"hw":    hws,
 	})
 }
 
